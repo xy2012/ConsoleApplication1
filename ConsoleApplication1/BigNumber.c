@@ -113,23 +113,6 @@ LinkList CreateListHead(LinkList L, char* string_temp, int n1, int n2)
 	return L;
 }
 
-/*
-//???????
-LinkList CreateListTail(LinkList L, char* string_temp, int n1, int n2)
-{
-LinkList p;
-p = (LinkList)malloc(sizeof(Node));
-//	p->data = string_temp;
-p->next = L->next;
-L->next = p;
-strcpy(p->data, string_temp);
-p->num = n1;
-p->en = n2;
-return L;
-}
-*/
-
-
 //align
 LinkList AlignList(LinkList L, int n)
 {
@@ -329,7 +312,7 @@ LinkList mul(LinkList L1, LinkList L2, LinkList L)
 	Node *p, *q, *r, *p_temp, *q_temp, *r_temp, *r_flag;
 	LinkList p0, L_temp;
 	int i, j, nu0 = 0, en0 = 0, flags = 0, cnt0 = 0, cnt = 0;
-	int a[4] = { 0 }, b[4] = { 0 }, c[8 - 1] = { 0 }, d[4] = { 0 };
+	int a[21] = { 0 }, b[21] = { 0 }, c[42 - 1] = { 0 }, d[21] = { 0 };
 	p = L1->next;
 	r_flag = L;
 	while (p)
@@ -338,7 +321,7 @@ LinkList mul(LinkList L1, LinkList L2, LinkList L)
 		q = L2->next;
 		r = r_flag;
 		en0 = 0;
-		for (i = 0; i < 4; i++)
+		for (i = 0; i < 21; i++)
 		{
 			a[i] = p->num;
 			p = p->next;
@@ -354,7 +337,7 @@ LinkList mul(LinkList L1, LinkList L2, LinkList L)
 			//		q_temp = q;
 			//		r_temp = r;
 
-			for (i = 0; i < 4; i++)
+			for (i = 0; i < 21; i++)
 			{
 				b[i] = q->num;
 				q = q->next;
@@ -366,7 +349,7 @@ LinkList mul(LinkList L1, LinkList L2, LinkList L)
 			else
 				cnt = i;
 			getconv(a, b, c, cnt0, cnt);
-			for (i = 0; i < min(4, cnt0 + cnt - 1); i++)
+			for (i = 0; i < min(21, cnt0 + cnt - 1); i++)
 			{
 
 				//	CreateListHead(L, "00", nu0, 0);
@@ -392,20 +375,20 @@ LinkList mul(LinkList L1, LinkList L2, LinkList L)
 				}
 				r = r->next;
 			}
-			for (i = 0; i < 4; i++)
+			for (i = 0; i < 21; i++)
 			{
 				b[i] = 0;
 				d[i] = 0;
 			}
 
-			if (cnt0 + cnt - 1 > 4)
+			if (cnt0 + cnt - 1 > 21)
 			{
-				for (i = 0; i < min(3, cnt0 + cnt - 1 - 4); i++)
+				for (i = 0; i < min(20, cnt0 + cnt - 1 - 21); i++)
 				{
-					d[i] = c[4 + i];
+					d[i] = c[21 + i];
 				}
 			}
-			for (i = 0; i < 7; i++)
+			for (i = 0; i < 41; i++)
 			{
 				c[i] = 0;
 			}
@@ -450,12 +433,12 @@ LinkList mul(LinkList L1, LinkList L2, LinkList L)
 
 		for (i = 0; i < cnt0; i++)
 			r_flag = r_flag->next;
-		for (i = 0; i < 4; i++)
+		for (i = 0; i < 21; i++)
 		{
 			a[i] = 0;
 			d[i] = 0;
 		}
-		for (i = 0; i < 7; i++)
+		for (i = 0; i < 41; i++)
 		{
 			c[i] = 0;
 		}
@@ -499,7 +482,7 @@ LinkList getL_temp(int k, int n, LinkList L1, LinkList L2, LinkList *L3)
 		}
 	}
 	p = L;
-	printf("%d\n",k);
+//	printf("%d\n",k);
 	if (k == 1919)
 	{
 		flags_err = 0;
@@ -554,9 +537,90 @@ int main()
 	char op, string_temp[5];
 	char top1, top2;
 	char mystring[5], mystring_temp[5];
-	FILE *ft;
+//	FILE *ft;
 	LinkList L1, L2, L, L_temp, L1_temp, L2_temp;
 
+	InitList(&L1);
+	InitList(&L2);
+	InitList(&L);
+	int flags = 1;
+	int nu1, nu2;
+	while (!digit[1][1])
+	{
+		
+		//getchar()
+	//	fgets(mystring, 5, ft);
+		if (strstr(mystring, "+") == NULL && strstr(mystring, "-") == NULL && strstr(mystring, "*") == NULL && strstr(mystring, "/") == NULL)
+		{
+			while (mystring != NULL)
+			{
+				//			puts(mystring);
+				if (strstr(mystring, "\n") == NULL && strlen(mystring) == 5 - 1)
+				{
+					//	strcpy(string_temp, mystring);
+					if (flags == 1)
+					{
+						L1 = CreateListHead(L1, mystring, 0, 0);
+						digit[0][0] = digit[0][0] + 1;
+					}
+					else
+					{
+						L2 = CreateListHead(L2, mystring, 0, 0);
+						digit[1][0] = digit[1][0] + 1;
+					}
+				}
+				else
+				{
+					if (flags == 1)
+					{
+						if (strlen(mystring) == 1)
+							digit[0][1] = 0;
+						else
+						{
+							L1 = CreateListHead(L1, mystring, 0, 0);
+							digit[0][1] = strlen(mystring) - 1;
+						}
+					}
+					flags = 2;
+				}
+				if (feof(ft))
+					break;
+				else {
+					fgets(mystring, 5, ft);
+					if (feof(ft))
+					{
+						digit[1][1] = strlen(mystring);
+						if (digit[1][1] == 4)
+							digit[1][1] = 0;
+						else
+						{
+							L2 = CreateListHead(L2, mystring, 0, 0);
+						}
+						break;
+					}
+				}
+			}
+			if (feof(ft))
+				break;
+		}
+		else
+		{
+			op = mystring[0];
+			//	putchar(op);
+			putchar('\n');
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+	/*
 	ft = fopen("C:\\Users\\v-xiafe\\Desktop\\ASE\\project (1)\\ConsoleApplication3\\Release\\test.txt", "r");
 	if (ft == NULL)
 	{
@@ -602,12 +666,6 @@ int main()
 							digit[0][1] = strlen(mystring) - 1;
 						}
 					}
-					/*	else
-					{
-					L2 = CreateListHead(L2, mystring);
-					digit[1][1] = strlen(mystring);
-					break;
-					}	*/
 					flags = 2;
 				}
 				if (feof(ft))
@@ -638,12 +696,14 @@ int main()
 		}
 	}
 	fclose(ft);
+	*/
+
 	L1 = AlignList(L1, digit[0][1]);
 	L2 = AlignList(L2, digit[1][1]);
-	if (op = '/')
+	if (op == '/')
 	{
-		InitList(&L1_temp);
-		InitList(&L2_temp);
+	//	InitList(&L1_temp);
+	//	InitList(&L2_temp);
 		Node *p, *q, *p0;
 		p = L1->next;
 		q = L2->next;
@@ -659,7 +719,7 @@ int main()
 			q = q->next;
 		}
 	}
-	
+	op = '*';
 	switch (op)
 	{
 	case '+':
@@ -750,7 +810,7 @@ int main()
 				}
 
 		//		Destory(L1_temp1);
-				Destory(L1_temp);
+		//		Destory(L1_temp);
 				L1_temp1 = L_subrev;
 
 			}
