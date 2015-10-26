@@ -1,6 +1,8 @@
 # ConsoleApplication1
 ase project1
 
+再更新：遇到一个奇怪的bug，变量被优化，调试了一遍就没有bug了。。。。。
+
 折腾到这个点，还是没有下成功github~明早回公司再弄吧
 输入输出已标准化
 
